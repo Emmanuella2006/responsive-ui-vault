@@ -1,0 +1,64 @@
+header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--nav-bg); height: var(--header-h);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; box-shadow: var(--shadow); transition: background 0.3s;
+    gap: 12px;
+}
+header h1 { font-size: 1.2rem; color: var(--nav-text); white-space: nowrap; flex-shrink: 0; }
+
+nav { display: flex; align-items: center; gap: 2px; flex-wrap: wrap; }
+nav button {
+    background: transparent; border: none; color: var(--nav-text);
+    padding: 8px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 500;
+    opacity: 0.75; transition: all 0.2s; white-space: nowrap;
+}
+nav button:hover { opacity: 1; background: rgba(255,255,255,0.15); }
+nav button.active { opacity: 1; background: rgba(255,255,255,0.22); font-weight: 700; }
+
+#themeSwitcher { display: flex; gap: 6px; margin-left: 8px; flex-shrink: 0; }
+.theme-btn {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.4); cursor: pointer;
+    transition: transform 0.2s; flex-shrink: 0;
+}
+.theme-btn:hover { transform: scale(1.25); }
+.theme-btn[data-t="light"] { background: #f0f2f5; }
+.theme-btn[data-t="dark"]  { background: #0f1117; }
+.theme-btn[data-t="pink"]  { background: #db2777; }
+.theme-btn[data-t="blue"]  { background: #1d4ed8; }
+
+main { max-width: 960px; margin: 0 auto; padding: 28px 20px 60px; }
+
+.view { animation: fadeIn 0.2s ease; }
+.hidden { display: none !important; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+footer {
+    text-align: center; padding: 20px;
+    font-size: 0.8rem; color: var(--text-muted);
+    border-top: 1px solid var(--border);
+}
+
+/* ── Breakpoints ── */
+
+/* Tablet ~768px */
+@media (max-width: 768px) {
+    header { flex-wrap: wrap; height: auto; padding: 10px 16px; gap: 8px; }
+    header h1 { font-size: 1rem; }
+    nav button { padding: 6px 10px; font-size: 0.78rem; }
+    main { padding: 20px 14px 40px; }
+}
+
+/* Mobile ~360px */
+@media (max-width: 420px) {
+    header h1 { font-size: 0.9rem; }
+    nav { gap: 1px; }
+    nav button { padding: 5px 7px; font-size: 0.72rem; }
+    #themeSwitcher { margin-left: 0; }
+    .theme-btn { width: 16px; height: 16px; }
+}
