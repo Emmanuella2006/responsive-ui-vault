@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Book & Notes Vault</title>
+    <title>Book &amp; Notes Vault</title>
     <link rel="stylesheet" href="styles/base.css" />
     <link rel="stylesheet" href="styles/layout.css" />
     <link rel="stylesheet" href="styles/components.css" />
@@ -12,7 +12,10 @@
     <a href="#main" class="skip-link">Skip to content</a>
 
     <header role="banner">
-        <h1>Book & Notes Vault</h1>
+        <div class="brand">
+            <span class="brand-icon" aria-hidden="true"></span>
+            <span class="brand-name">Book &amp; Notes Vault</span>
+        </div>
         <nav role="navigation" aria-label="Main navigation">
             <button data-view="dashboard" aria-current="page">Dashboard</button>
             <button data-view="records">Records</button>
@@ -20,7 +23,7 @@
             <button data-view="settings">Settings</button>
             <button data-view="about">About</button>
         </nav>
-        <div id="themeSwitcher" aria-label="Theme switcher">
+        <div id="themeSwitcher" aria-label="Theme switcher" role="group">
             <button class="theme-btn" data-t="light" title="Light theme" aria-label="Light theme"></button>
             <button class="theme-btn" data-t="dark"  title="Dark theme"  aria-label="Dark theme"></button>
             <button class="theme-btn" data-t="pink"  title="Pink theme"  aria-label="Pink theme"></button>
@@ -34,13 +37,9 @@
         <section id="dashboard" class="view" aria-labelledby="dash-heading">
             <div class="dash-search-bar">
                 <label for="dashSearch" class="sr-only">Search your vault</label>
-                <input type="text" id="dashSearch" placeholder="🔍  Search books & notes..." aria-label="Search books and notes" />
-                <label class="case-label">
-                    <input type="checkbox" id="dashCaseToggle" />
-                    Case Sensitive
-                </label>
+                <input type="text" id="dashSearch" placeholder="Search books &amp; notes..." aria-label="Search books and notes" autocomplete="off" />
             </div>
-            <div id="dashContent"></div>
+            <div id="dashContent" aria-live="polite"></div>
         </section>
 
         <!-- RECORDS -->
@@ -49,20 +48,16 @@
             <div class="toolbar">
                 <div class="search-bar">
                     <label for="searchInput" class="sr-only">Search records</label>
-                    <input type="text" id="searchInput" placeholder="Regex search..." aria-label="Search records" />
-                    <label class="case-label">
-                        <input type="checkbox" id="caseToggle" />
-                        Case Sensitive
-                    </label>
+                    <input type="text" id="searchInput" placeholder="Search records..." aria-label="Search records" autocomplete="off" />
                 </div>
                 <div class="sort-bar">
                     <label for="sortField" class="sr-only">Sort by</label>
                     <select id="sortField" aria-label="Sort by field">
                         <option value="createdAt">Date Added</option>
-                        <option value="title">Title A→Z</option>
+                        <option value="title">Title A-Z</option>
                         <option value="pages">Pages</option>
                     </select>
-                    <button id="sortDir" aria-label="Toggle sort direction">↑</button>
+                    <button id="sortDir" aria-label="Toggle sort direction">ASC</button>
                 </div>
             </div>
             <div id="searchStatus" role="status" aria-live="polite"></div>
@@ -84,25 +79,25 @@
 
                 <div class="form-group">
                     <label for="title">Title <span class="required" aria-hidden="true">*</span></label>
-                    <input id="title" required aria-required="true" aria-describedby="titleErr" />
+                    <input id="title" required aria-required="true" aria-describedby="titleErr" autocomplete="off" />
                     <span id="titleErr" class="field-error" role="alert" aria-live="assertive"></span>
                 </div>
 
                 <div class="form-group" id="authorGroup">
                     <label for="author">Author <span class="required" aria-hidden="true">*</span></label>
-                    <input id="author" aria-required="true" aria-describedby="authorErr" />
+                    <input id="author" aria-required="true" aria-describedby="authorErr" autocomplete="off" />
                     <span id="authorErr" class="field-error" role="alert" aria-live="assertive"></span>
                 </div>
 
                 <div class="form-group" id="pagesGroup">
                     <label for="pages">Pages <span class="required" aria-hidden="true">*</span></label>
-                    <input id="pages" type="number" aria-required="true" aria-describedby="pagesErr" />
+                    <input id="pages" type="number" min="1" aria-required="true" aria-describedby="pagesErr" />
                     <span id="pagesErr" class="field-error" role="alert" aria-live="assertive"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="tag">Tag <span class="required" aria-hidden="true">*</span></label>
-                    <input id="tag" aria-required="true" aria-describedby="tagErr" placeholder="e.g. fiction, science" />
+                    <input id="tag" aria-required="true" aria-describedby="tagErr" placeholder="e.g. fiction, science" autocomplete="off" />
                     <span id="tagErr" class="field-error" role="alert" aria-live="assertive"></span>
                 </div>
 
@@ -114,13 +109,14 @@
 
                 <div class="form-group" id="noteContentGroup" style="display:none">
                     <label for="noteContent">Content</label>
-                    <textarea id="noteContent" rows="4" placeholder="Write your note here..." aria-describedby="noteContentErr"></textarea>
+                    <textarea id="noteContent" rows="5" placeholder="Write your note here..." aria-describedby="noteContentErr"></textarea>
                     <span id="noteContentErr" class="field-error" role="alert" aria-live="assertive"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="coverFile">Cover Image <span class="optional">(optional)</span></label>
-                    <input id="coverFile" type="file" accept="image/*" />
+                    <input id="coverFile" type="file" accept="image/*" aria-describedby="coverHint" />
+                    <span id="coverHint" class="field-hint">Upload an image from your device.</span>
                     <img id="coverPreview" src="" alt="Cover preview" class="cover-preview hidden" />
                 </div>
 
@@ -134,19 +130,20 @@
             <h2 id="settings-heading">Settings</h2>
             <div class="settings-card">
                 <div class="form-group">
-                    <label for="pageCap">Page Cap (reading goal)</label>
-                    <input type="number" id="pageCap" placeholder="e.g. 5000" aria-describedby="pageCapStatus" />
+                    <label for="pageCap">Page Cap</label>
+                    <p class="field-hint">Set a reading goal. A warning appears when exceeded.</p>
+                    <input type="number" id="pageCap" placeholder="e.g. 5000" min="0" />
                 </div>
                 <div class="form-group">
-                    <label for="pageUnit">Page Unit</label>
-                    <select id="pageUnit" aria-label="Page unit">
+                    <label for="pageUnit">Unit</label>
+                    <select id="pageUnit">
                         <option value="pages">Pages</option>
                         <option value="chapters">Chapters</option>
                     </select>
                 </div>
                 <div class="settings-row">
-                    <button id="exportBtn">⬆ Export JSON</button>
-                    <label class="file-label" for="importFile">⬇ Import JSON
+                    <button id="exportBtn">Export JSON</button>
+                    <label class="file-label" for="importFile">Import JSON
                         <input type="file" id="importFile" accept=".json" />
                     </label>
                 </div>
@@ -158,48 +155,31 @@
         <section id="about" class="view hidden" aria-labelledby="about-heading">
             <h2 id="about-heading">About</h2>
             <div class="about-card">
-                <p>A modern, accessible <strong>Book & Notes Vault</strong> — track your reading and notes in one place.</p>
-                <p>Built with semantic HTML, CSS Flexbox, and vanilla JavaScript ES modules.</p>
-                <p>GitHub: <a href="#" aria-label="GitHub profile">Emmanuella2006</a></p>
-                <p>Email: <a href="mailto:your@email.com">e.gacuti@alustudent.com</a></p>
+                <p>A modern, accessible <strong>Book &amp; Notes Vault</strong> — catalog your reading and personal notes in one organised interface.</p>
+                <p>Built with semantic HTML5, CSS Flexbox, and vanilla JavaScript ES modules. No frameworks.</p>
+                <p>GitHub: <a href="https://github.com/Emmanuella2006" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">Emmanuella2006</a></p>
+                <p>Email: <a href="mailto:e.gacuti@alustudent.com">e.gacuti@alustudent.com</a></p>
             </div>
         </section>
 
     </main>
 
     <footer role="contentinfo">
-        <p>© 2026 Book & Notes Vault</p>
+        <p>&copy; 2026 Book &amp; Notes Vault</p>
     </footer>
 
-    <!-- Theme & nav scripts -->
     <script>
-        const saved = localStorage.getItem('vault:theme') || 'light';
-        document.documentElement.setAttribute('data-theme', saved);
-        document.getElementById('themeSwitcher').addEventListener('click', e => {
-            const t = e.target.dataset.t;
-            if (!t) return;
-            document.documentElement.setAttribute('data-theme', t);
-            localStorage.setItem('vault:theme', t);
-        });
-        // Show cover preview on file pick
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('coverFile').addEventListener('change', function () {
-                const preview = document.getElementById('coverPreview');
-                if (this.files[0]) {
-                    preview.src = URL.createObjectURL(this.files[0]);
-                    preview.classList.remove('hidden');
-                } else {
-                    preview.classList.add('hidden');
-                }
+        (function () {
+            var saved = localStorage.getItem('vault:theme') || 'light';
+            document.documentElement.setAttribute('data-theme', saved);
+
+            document.getElementById('themeSwitcher').addEventListener('click', function (e) {
+                var t = e.target.dataset.t;
+                if (!t) return;
+                document.documentElement.setAttribute('data-theme', t);
+                localStorage.setItem('vault:theme', t);
             });
-            // Toggle note-only fields
-            document.getElementById('itemType').addEventListener('change', function () {
-                const isNote = this.value === 'note';
-                document.getElementById('authorGroup').style.display = isNote ? 'none' : '';
-                document.getElementById('pagesGroup').style.display = isNote ? 'none' : '';
-                document.getElementById('noteContentGroup').style.display = isNote ? '' : 'none';
-            });
-        });
+        })();
     </script>
     <script type="module" src="scripts/main.js"></script>
 </body>
