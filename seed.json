@@ -1,0 +1,12 @@
+[
+    {
+        "id": "book_1",
+        "title": "Wireless Communication: Principles and Practice",
+        "author": "Robert Martin",
+        "pages": 464,
+        "tag": "Software Engineering",
+        "dateAdded": "2026-02-10",
+        "createdAt": "2026-02-10T10:00:00Z",
+        "updatedAt": "2026-02-10T10:00:00Z"
+    }
+]

@@ -1,0 +1,8 @@
+<script type="module">
+    import { patterns } from "./scripts/validators.js";
+
+    console.assert(patterns.title.test("Clean Code"));
+    console.assert(!patterns.title.test(" Clean "));
+    console.assert(patterns.duplicateWord.test("John John"));
+    console.log("All regex tests passed.");
+</script>
