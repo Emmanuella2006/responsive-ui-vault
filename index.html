@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book & Notes Vault</title>
+    <link rel="stylesheet" href="styles/base.css" />
+    <link rel="stylesheet" href="styles/layout.css" />
+    <link rel="stylesheet" href="styles/components.css" />
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <header role="banner">
+        <h1>Book & Notes Vault</h1>
+        <nav role="navigation" aria-label="Main navigation">
+            <button data-view="dashboard" aria-current="page">Dashboard</button>
+            <button data-view="records">Records</button>
+            <button data-view="add">Add Item</button>
+            <button data-view="settings">Settings</button>
+            <button data-view="about">About</button>
+        </nav>
+        <div id="themeSwitcher" aria-label="Theme switcher">
+            <button class="theme-btn" data-t="light" title="Light theme" aria-label="Light theme"></button>
+            <button class="theme-btn" data-t="dark"  title="Dark theme"  aria-label="Dark theme"></button>
+            <button class="theme-btn" data-t="pink"  title="Pink theme"  aria-label="Pink theme"></button>
+            <button class="theme-btn" data-t="blue"  title="Blue theme"  aria-label="Blue theme"></button>
+        </div>
+    </header>
+
+    <main id="main" role="main">
+
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="view" aria-labelledby="dash-heading">
+            <div class="dash-search-bar">
+                <label for="dashSearch" class="sr-only">Search your vault</label>
+                <input type="text" id="dashSearch" placeholder="🔍  Search books & notes..." aria-label="Search books and notes" />
+                <label class="case-label">
+                    <input type="checkbox" id="dashCaseToggle" />
+                    Case Sensitive
+                </label>
+            </div>
+            <div id="dashContent"></div>
+        </section>
+
+        <!-- RECORDS -->
+        <section id="records" class="view hidden" aria-labelledby="rec-heading">
+            <h2 id="rec-heading">Records</h2>
+            <div class="toolbar">
+                <div class="search-bar">
+                    <label for="searchInput" class="sr-only">Search records</label>
+                    <input type="text" id="searchInput" placeholder="Regex search..." aria-label="Search records" />
+                    <label class="case-label">
+                        <input type="checkbox" id="caseToggle" />
+                        Case Sensitive
+                    </label>
+                </div>
+                <div class="sort-bar">
+                    <label for="sortField" class="sr-only">Sort by</label>
+                    <select id="sortField" aria-label="Sort by field">
+                        <option value="createdAt">Date Added</option>
+                        <option value="title">Title A→Z</option>
+                        <option value="pages">Pages</option>
+                    </select>
+                    <button id="sortDir" aria-label="Toggle sort direction">↑</button>
+                </div>
+            </div>
+            <div id="searchStatus" role="status" aria-live="polite"></div>
+            <div id="recordsContainer"></div>
+        </section>
+
+        <!-- ADD / EDIT -->
+        <section id="add" class="view hidden" aria-labelledby="form-heading">
+            <form id="itemForm" novalidate aria-labelledby="form-heading">
+                <h2 id="form-heading">Add Item</h2>
+
+                <div class="form-group">
+                    <label for="itemType">Type</label>
+                    <select id="itemType">
+                        <option value="book">Book</option>
+                        <option value="note">Note</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="title">Title <span class="required" aria-hidden="true">*</span></label>
+                    <input id="title" required aria-required="true" aria-describedby="titleErr" />
+                    <span id="titleErr" class="field-error" role="alert" aria-live="assertive"></span>
+                </div>
+
+                <div class="form-group" id="authorGroup">
+                    <label for="author">Author <span class="required" aria-hidden="true">*</span></label>
+                    <input id="author" aria-required="true" aria-describedby="authorErr" />
+                    <span id="authorErr" class="field-error" role="alert" aria-live="assertive"></span>
+                </div>
+
+                <div class="form-group" id="pagesGroup">
+                    <label for="pages">Pages <span class="required" aria-hidden="true">*</span></label>
+                    <input id="pages" type="number" aria-required="true" aria-describedby="pagesErr" />
+                    <span id="pagesErr" class="field-error" role="alert" aria-live="assertive"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="tag">Tag <span class="required" aria-hidden="true">*</span></label>
+                    <input id="tag" aria-required="true" aria-describedby="tagErr" placeholder="e.g. fiction, science" />
+                    <span id="tagErr" class="field-error" role="alert" aria-live="assertive"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="dateAdded">Date Added <span class="required" aria-hidden="true">*</span></label>
+                    <input id="dateAdded" type="date" aria-required="true" aria-describedby="dateErr" />
+                    <span id="dateErr" class="field-error" role="alert" aria-live="assertive"></span>
+                </div>
+
+                <div class="form-group" id="noteContentGroup" style="display:none">
+                    <label for="noteContent">Content</label>
+                    <textarea id="noteContent" rows="4" placeholder="Write your note here..." aria-describedby="noteContentErr"></textarea>
+                    <span id="noteContentErr" class="field-error" role="alert" aria-live="assertive"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="coverFile">Cover Image <span class="optional">(optional)</span></label>
+                    <input id="coverFile" type="file" accept="image/*" />
+                    <img id="coverPreview" src="" alt="Cover preview" class="cover-preview hidden" />
+                </div>
+
+                <button type="submit">Save Item</button>
+                <div id="formStatus" role="status" aria-live="polite"></div>
+            </form>
+        </section>
+
+        <!-- SETTINGS -->
+        <section id="settings" class="view hidden" aria-labelledby="settings-heading">
+            <h2 id="settings-heading">Settings</h2>
+            <div class="settings-card">
+                <div class="form-group">
+                    <label for="pageCap">Page Cap (reading goal)</label>
+                    <input type="number" id="pageCap" placeholder="e.g. 5000" aria-describedby="pageCapStatus" />
+                </div>
+                <div class="form-group">
+                    <label for="pageUnit">Page Unit</label>
+                    <select id="pageUnit" aria-label="Page unit">
+                        <option value="pages">Pages</option>
+                        <option value="chapters">Chapters</option>
+                    </select>
+                </div>
+                <div class="settings-row">
+                    <button id="exportBtn">⬆ Export JSON</button>
+                    <label class="file-label" for="importFile">⬇ Import JSON
+                        <input type="file" id="importFile" accept=".json" />
+                    </label>
+                </div>
+                <div id="settingsStatus" role="status" aria-live="polite"></div>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about" class="view hidden" aria-labelledby="about-heading">
+            <h2 id="about-heading">About</h2>
+            <div class="about-card">
+                <p>A modern, accessible <strong>Book & Notes Vault</strong> — track your reading and notes in one place.</p>
+                <p>Built with semantic HTML, CSS Flexbox, and vanilla JavaScript ES modules.</p>
+                <p>GitHub: <a href="#" aria-label="GitHub profile">yourusername</a></p>
+                <p>Email: <a href="mailto:your@email.com">your@email.com</a></p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer role="contentinfo">
+        <p>© 2026 Book & Notes Vault</p>
+    </footer>
+
+    <!-- Theme & nav scripts -->
+    <script>
+        const saved = localStorage.getItem('vault:theme') || 'light';
+        document.documentElement.setAttribute('data-theme', saved);
+        document.getElementById('themeSwitcher').addEventListener('click', e => {
+            const t = e.target.dataset.t;
+            if (!t) return;
+            document.documentElement.setAttribute('data-theme', t);
+            localStorage.setItem('vault:theme', t);
+        });
+        // Show cover preview on file pick
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('coverFile').addEventListener('change', function () {
+                const preview = document.getElementById('coverPreview');
+                if (this.files[0]) {
+                    preview.src = URL.createObjectURL(this.files[0]);
+                    preview.classList.remove('hidden');
+                } else {
+                    preview.classList.add('hidden');
+                }
+            });
+            // Toggle note-only fields
+            document.getElementById('itemType').addEventListener('change', function () {
+                const isNote = this.value === 'note';
+                document.getElementById('authorGroup').style.display = isNote ? 'none' : '';
+                document.getElementById('pagesGroup').style.display = isNote ? 'none' : '';
+                document.getElementById('noteContentGroup').style.display = isNote ? '' : 'none';
+            });
+        });
+    </script>
+    <script type="module" src="scripts/main.js"></script>
+</body>
+</html>
